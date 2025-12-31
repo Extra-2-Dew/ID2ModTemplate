@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace ID2.$safeprojectname$;
 
-[BepInPlugin("id2.$safeprojectname$", "$projectname$", "0.1.0")]
+[BepInPlugin(PluginInfo.guid, PluginInfo.name, PluginInfo.version)]
 public class Plugin : BaseUnityPlugin
 {
 	internal static new ManualLogSource Logger;
@@ -19,19 +19,20 @@ public class Plugin : BaseUnityPlugin
 		instance = this;
 		Logger = base.Logger;
 
-		Logger.LogInfo($"Plugin $projectname$ (id2.$safeprojectname$) is loaded!");
-
 		try
 		{
 			// Mod initialization code here
 
-			var harmony = new Harmony("id2.$safeprojectname$");
+			Harmony harmony = new(PluginInfo.guid);
 			harmony.PatchAll();
 		}
-		catch (System.Exception err)
+		catch (System.Exception ex)
 		{
-			Logger.LogError(err);
+			$safeprojectname$.Logger.LogError($"Unhandled exception during initialization: {ex.Message}");
+			return;
 		}
+
+		Logger.LogInfo($"Initialized [{PluginInfo.name} {PluginInfo.version}]");
 	}
 
 	/// <summary>
